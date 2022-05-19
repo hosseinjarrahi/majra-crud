@@ -1,17 +1,25 @@
 import { reactive, ref } from "vue";
-import { loadItems } from "./useStore";
+import { loadItem } from "./useStore";
 import { mainKey } from "./useStore";
+import { get as getSafe } from "lodash";
 
-const paginations = reactive({});
+const pagination = reactive({
+  total: "",
+  currentPage: "",
+  lastPage: "",
+});
 const page = ref(1);
 
 function paginate(page) {
-  loadItems({
-    page,
-    key: mainKey,
-  });
+  loadItem(mainKey, page);
+}
+
+function setPagination(response) {
+  pagination.total = getSafe(response.data[mainKey], "total");
+  pagination.currentPage = getSafe(response.data[mainKey], "current_page");
+  pagination.lastPage = getSafe(response.data[mainKey], "last_page");
 }
 
 export function usePagination() {
-  return { paginations, page, paginate };
+  return { pagination, page, paginate };
 }

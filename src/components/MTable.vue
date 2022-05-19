@@ -4,7 +4,7 @@
       <div class="overflow-x-auto shadow-md sm:rounded-lg">
         <div class="inline-block min-w-full align-middle">
           <div class="overflow-hidden">
-            <MDataTable :headers="headers" :data="" />
+            <MDataTable :headers="headers" :data="mainItem" />
           </div>
         </div>
       </div>
@@ -15,7 +15,8 @@
 <script setup>
 import { useStore } from "../composables/useStore";
 import { useFields } from "./../composables/useFields";
+import MDataTable from "./MDataTable.vue";
 
 const { headers } = useFields();
-const { item } = useStore();
+const { mainItem } = useStore();
 </script>
