@@ -1,33 +1,36 @@
 import { get as getSafe } from "lodash";
-import { emitter } from "majra-core";
+import { useEmitter } from "majra-core";
 import { useStore } from "./useStore";
 import { useOptions } from "./useOptions";
-import { useFields, initFields } from "./useFields";
+import { useFields } from "./useFields";
+import { usePagination } from "./usePagination";
 
-const { mainKey, loadRelations, addRoute, loadItem, hiddenActions } = useStore();
-const { options } = useOptions();
-const { fields } = useFields();
-const { event, clear: clearEventListeners } = emitter();
+const { event, clear: clearEventListeners, emitter } = useEmitter();
 
-function resetStates(state) {
-  state.items = [];
-  state.options = [];
-  state.loading = {};
-  state.pagination = {
-    currentPage: 1,
-    total: 0,
-  };
-  state.routes = [];
-  mainKey.value = false;
-  state.fields = [];
-  state.hiddenActions = [];
-  state.flatFields = [];
-  state.backup = false;
-  state.headers = [];
+function resetStates() {
+  let { reset: resetStore } = useStore();
+  resetStore();
+
+  let { reset: resetOptions } = useOptions();
+  resetOptions();
+
+  let { reset: resetFields } = useFields();
+  resetFields();
+
+  let { reset: resetPaginations } = usePagination();
+  resetPaginations();
+
   emitter.off("readyToFetchRelations");
 }
 
 function init(payload = {}) {
+  // eslint-disable-next-line no-unused-vars
+  let { mainKey, loadRelations, addRoute, loadItem, hiddenActions } =
+    useStore();
+
+  const { options } = useOptions();
+  const { fields, initFields } = useFields();
+
   clearEventListeners();
 
   resetStates();
@@ -41,7 +44,7 @@ function init(payload = {}) {
   loadItem(mainKey.value);
 
   Object.assign(options, getSafe(payload, "options", {}));
-  Object.assign(fields, getSafe(payload, "fields", []));
+  fields.value = getSafe(payload, "fields", []);
 
   initFields();
 
@@ -49,5 +52,5 @@ function init(payload = {}) {
 }
 
 export function useCrud() {
-  return { init, addRoute };
+  return { init };
 }

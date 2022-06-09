@@ -12,7 +12,7 @@ const initTable = (
   });
 };
 
-export default function useTabulator() {
+export function useTabulator() {
   return {
     initTable,
     tableInstance,

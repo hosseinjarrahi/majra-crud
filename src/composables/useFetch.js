@@ -6,10 +6,6 @@ function get(url, headers = {}) {
       "Content-Type": "application/json;charset=UTF-8",
       ...headers,
     },
-    body: JSON.stringify({
-      a: 10,
-      b: 20,
-    }),
   };
   return fetch(url, options);
 }
@@ -27,7 +23,7 @@ function post(url, data, headers = {}) {
   return fetch(url, options);
 }
 
-export default function useFetch() {
+export function useFetch() {
   return {
     get,
     post,

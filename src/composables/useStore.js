@@ -1,16 +1,17 @@
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
 import { get as getSafe } from "lodash";
 import { pascalCase } from "./useHelper";
 import { useEmitter } from "majra-core";
-import useLoading from "./useLoading";
-import usePagination from "./usePagination";
-import useFields from "./useFields";
-import ft from "./useFetch";
+import { useLoading } from "./useLoading";
+import { usePagination } from "./usePagination";
+import { useFields } from "./useFields";
+import { useFetch } from "./useFetch";
 
 const { setPagination } = usePagination();
 const { listen, event } = useEmitter();
 const { loadings } = useLoading();
 const { flatFields, convertToSendForm } = useFields();
+const ft = useFetch();
 
 const items = reactive({});
 const mainKey = ref(false);
@@ -18,6 +19,18 @@ const isEditing = false;
 const routes = [];
 let hiddenActions = reactive([]);
 let relationsFetched = false;
+
+const mainItem = computed(() => {
+  return getSafe(items, mainKey?.value, []);
+});
+
+function reset() {
+  Object.assign(items, {});
+  routes.splice(0);
+  mainKey.value = false;
+  hiddenActions.splice(0);
+  // backup = false
+}
 
 function addRoute(payload) {
   const key =
@@ -155,19 +168,20 @@ function edit(payload) {
     .finally(() => {});
 }
 
-export default function useStore() {
+export function useStore() {
   return {
     add,
     edit,
+    reset,
     items,
     routes,
     mainKey,
     getItem,
     addRoute,
     loadItem,
+    mainItem,
     isEditing,
     loadRelations,
     hiddenActions,
-    mainItem: getSafe(items, mainKey.value),
   };
 }

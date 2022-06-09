@@ -1,5 +1,5 @@
 import { reactive, computed } from "vue";
-import useStore from "./useStore";
+import { useStore } from "./useStore";
 import { has } from "lodash";
 
 const fields = reactive({ value: [] });
@@ -30,6 +30,10 @@ const headers = computed(() => {
   return temp;
 });
 
+function reset() {
+  fields.value = [];
+}
+
 function filteredFields(fields) {
   return filterFieldsByShow(fields, isEditing.value ? "edit" : "create");
 }
@@ -39,7 +43,7 @@ function getSendKey(field) {
 }
 
 function initFields() {
-  for (const field of fields) {
+  for (const field of fields.value) {
     if ("init" in field) {
       field.init();
     }
@@ -84,8 +88,9 @@ function hasChild(field) {
   return has(field, "rel.child.model");
 }
 
-export default function useFields() {
+export function useFields() {
   return {
+    reset,
     fields,
     headers,
     hasChild,

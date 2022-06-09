@@ -2,6 +2,10 @@ import { reactive } from "vue";
 
 const loadings = reactive({ mainLoading: false });
 
-export default function useLoading() {
-  return loadings;
+function reset() {
+  Object.assign(loadings, {});
+}
+
+export function useLoading() {
+  return { loadings, reset };
 }

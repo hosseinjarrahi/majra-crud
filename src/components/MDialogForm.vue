@@ -14,7 +14,6 @@
 
 <script setup>
 import { watch } from "vue";
-import DynamicFormCore from "./DynamicFormCore.vue";
 import { useEmitter } from "majra-core";
 import { useStore } from "./../composables/useStore";
 
