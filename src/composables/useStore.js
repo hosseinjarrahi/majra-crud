@@ -1,15 +1,16 @@
 import { reactive, ref } from "vue";
 import { get as getSafe } from "lodash";
-import { useEmitter } from "majra-core";
-import { useLoading } from "./useLoading";
-import { usePagination } from "./usePagination";
 import { pascalCase } from "./useHelper";
-import { useFields } from "./useFields";
+import { useEmitter } from "majra-core";
+import useLoading from "./useLoading";
+import usePagination from "./usePagination";
+import useFields from "./useFields";
+import ft from "./useFetch";
 
 const { setPagination } = usePagination();
 const { listen, event } = useEmitter();
 const { loadings } = useLoading();
-const { flatFields } = useFields();
+const { flatFields, convertToSendForm } = useFields();
 
 const items = reactive({});
 const mainKey = ref(false);
@@ -43,8 +44,7 @@ function loadItem(key, page = 1, all = false) {
 
   const route = getSafe(routes, key, "") + pageQuery + page + "&" + query;
 
-  axios
-    .get(route)
+  ft.get(route)
     .then((response) => {
       setData(key, response.data[key].data);
 
@@ -108,8 +108,7 @@ function add(payload) {
 
   let data = { [mainKey]: sendForm };
 
-  axios
-    .post(route, data)
+  ft.post(route, data)
     .then((response) => {
       let newItems = Array.isArray(response.data[mainKey])
         ? response.data[mainKey]
@@ -141,8 +140,7 @@ function edit(payload) {
 
   let data = { [mainKey]: sendForm };
 
-  axios
-    .patch(route + "/" + payload.id, data)
+  ft.patch(route + "/" + payload.id, data)
     .then((response) => {
       editItem(response.data[mainKey]);
       event("alert", { text: "با موفقیت ویرایش شد", color: "green" });
@@ -157,7 +155,7 @@ function edit(payload) {
     .finally(() => {});
 }
 
-export function useStore() {
+export default function useStore() {
   return {
     add,
     edit,

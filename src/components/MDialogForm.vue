@@ -1,8 +1,5 @@
 <template>
-  <dialog
-    :value="value"
-    @input="handleDialog"
-  >
+  <dialog :value="value" @input="handleDialog">
     <dynamic-form-core
       :tabs="tabs"
       :tabModel="tabModel"
@@ -16,7 +13,7 @@
 </template>
 
 <script setup>
-import { defineProps, watch } from "vue";
+import { watch } from "vue";
 import DynamicFormCore from "./DynamicFormCore.vue";
 import { useEmitter } from "majra-core";
 import { useStore } from "./../composables/useStore";

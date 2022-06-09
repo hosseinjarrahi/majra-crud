@@ -1,14 +1,12 @@
 <template>
   <div>
     <component :is="MTable" v-bind="bind()" />
-    <MTablePagination />
   </div>
 </template>
 
 <script setup>
 import { useStore } from "./../composables/useStore";
 import { usePagination } from "./../composables/usePagination";
-import MTablePagination from "./MTablePagination.vue";
 import MTable from "./MTable.vue";
 
 const { getItem, mainKey } = useStore();

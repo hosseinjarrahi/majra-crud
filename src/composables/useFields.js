@@ -1,5 +1,6 @@
 import { reactive, computed } from "vue";
-import { useStore } from "./useStore";
+import useStore from "./useStore";
+import { has } from "lodash";
 
 const fields = reactive({ value: [] });
 const { isEditing } = useStore();
@@ -79,10 +80,15 @@ function findField(field, fields = false) {
   return getField(field);
 }
 
-export function useFields() {
+function hasChild(field) {
+  return has(field, "rel.child.model");
+}
+
+export default function useFields() {
   return {
     fields,
     headers,
+    hasChild,
     getField,
     findField,
     initFields,

@@ -30,7 +30,6 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
 import { get as getSafe } from "lodash";
 
 const props = defineProps({

@@ -24,7 +24,7 @@ function resetStates(state) {
   state.flatFields = [];
   state.backup = false;
   state.headers = [];
-  Vue._bus.$off("readyToFetchRelations");
+  emitter.off("readyToFetchRelations");
 }
 
 function init(payload = {}) {
@@ -41,7 +41,7 @@ function init(payload = {}) {
   loadItem(mainKey.value);
 
   Object.assign(options, getSafe(payload, "options", {}));
-  fields.assign(fields, getSafe(payload, "fields", []));
+  Object.assign(fields, getSafe(payload, "fields", []));
 
   initFields();
 

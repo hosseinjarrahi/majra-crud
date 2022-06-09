@@ -39,7 +39,6 @@
 
 <script>
 import { MForm } from "majra-core";
-import { defineProps } from "vue";
 import { useStore } from "./useStore";
 
 const { isEditing } = useStore();
